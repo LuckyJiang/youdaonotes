@@ -8,7 +8,7 @@
 >
 > J2EE开发的一站式解决方案；
 
-![](E:\网盘\尚硅谷SpringBoot核心技术篇\我的学习笔记\Spring Boot 笔记\images\优点.png)
+![](images\优点.png)
 
 ## 2、微服务
 
@@ -24,7 +24,7 @@
 
 [详细参照微服务文档](https://martinfowler.com/articles/microservices.html#MicroservicesAndSoa)
 
-<img src="E:\网盘\尚硅谷SpringBoot核心技术篇\我的学习笔记\Spring Boot 笔记\images\springboot工作流程.png" style="zoom:75%;" />
+<img src="images\springboot工作流程.png" style="zoom:75%;" />
 
 ## 3、环境准备
 
@@ -3929,30 +3929,29 @@ starter：
 @Bean  //给容器中添加组件
 
 @ConfigurationPropertie结合相关xxxProperties类来绑定相关的配置
-@EnableConfigurationProperties //让xxxProperties生效加入到容器中
+@EnableConfigurationProperties //让xxxProperties生效,并将其加入到容器中
 
-自动配置类要能加载
-将需要启动就加载的自动配置类，配置在META-INF/spring.factories
+自动配置类要能加载的条件：必须将需要启动就加载的自动配置类，配置在META-INF/spring.factories
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.springframework.boot.autoconfigure.admin.SpringApplicationAdminJmxAutoConfiguration,\
 org.springframework.boot.autoconfigure.aop.AopAutoConfiguration,\
 ```
 
-​	3、模式：
+​	3、启动器的模式规则：
 
-启动器只用来做依赖导入；
+（1）启动器模块是一个空的jar文件，启动器只用来做依赖导入（在pom.xml中配置）；
 
-专门来写一个自动配置模块；
+（2）专门来写一个自动配置模块命名规则如下；
 
-启动器依赖自动配置；别人只需要引入启动器（starter）
+​	这样启动器依赖自动配置；如果别人用，则只需要引入启动器（starter）
 
 mybatis-spring-boot-starter；自定义启动器名-spring-boot-starter
 
-
+![](images/sprign-boot-starter.png)
 
 步骤：
 
-1）、启动器模块
+1）、启动器模块：空的jar文件 
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -4010,7 +4009,7 @@ mybatis-spring-boot-starter；自定义启动器名-spring-boot-starter
 
    <dependencies>
 
-      <!--引入spring-boot-starter；所有starter的基本配置-->
+      <!--*******引入spring-boot-starter；所有starter的基本配置**********-->
       <dependency>
          <groupId>org.springframework.boot</groupId>
          <artifactId>spring-boot-starter</artifactId>
@@ -4086,10 +4085,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+//提示：如果想让XXXAutoConfiguration生效，需要将其在META-INFO/spring.factories中配置
 @Configuration
 @ConditionalOnWebApplication //web应用才生效
-@EnableConfigurationProperties(HelloProperties.class)
+@EnableConfigurationProperties(HelloProperties.class)//让HelloProperties生效，这样就可以使用注解autowired helloProperties
 public class HelloServiceAutoConfiguration {
 
     @Autowired
@@ -4103,6 +4102,8 @@ public class HelloServiceAutoConfiguration {
 }
 
 ```
+
+![](images/spring-auto-config.png)
 
 # 更多SpringBoot整合示例
 
